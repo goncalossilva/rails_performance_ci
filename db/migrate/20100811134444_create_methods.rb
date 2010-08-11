@@ -5,6 +5,7 @@ class CreateMethods < ActiveRecord::Migration
       t.integer :calls
       t.float :total_time
       t.float :self_time
+      t.references :thread
 
       t.timestamps
     end

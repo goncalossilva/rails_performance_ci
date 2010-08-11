@@ -1,7 +1,9 @@
 class CreateTests < ActiveRecord::Migration
   def self.up
     create_table :tests do |t|
+      t.string :name
       t.float :total_time
+      t.references :run
 
       t.timestamps
     end

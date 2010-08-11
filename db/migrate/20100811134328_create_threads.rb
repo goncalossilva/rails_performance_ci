@@ -3,6 +3,7 @@ class CreateThreads < ActiveRecord::Migration
     create_table :threads do |t|
       t.integer :thread_id
       t.float :total_time
+      t.references :test
 
       t.timestamps
     end
