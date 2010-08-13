@@ -1,5 +1,5 @@
 class App < ActiveRecord::Base
-  has_many :performance_benchmarks
+  has_many :performance_benchmarks, :dependent => :destroy
   
   after_save :check_scheduling
   
