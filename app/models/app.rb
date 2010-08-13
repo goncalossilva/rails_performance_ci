@@ -45,6 +45,7 @@ class App < ActiveRecord::Base
   end
   
   def import_results(results)
+    # import the data into the database
     ActiveRecord::Base.transaction do
       pb = PerfBenchmark.create!({:date => Time.now, :app => self})
       
@@ -73,6 +74,9 @@ class App < ActiveRecord::Base
             end
           end
         end
+        
+        File.move("#{ts_name}.html", "#{Rails.root}/public/assets/stack/#{ts.id}.html")
+        File.delete("#{ts_name}.yml")
       end
     
       pb.update_attribute(:total_time, pb.perf_tests.inject { |total, pt| total += pt.total_time })
