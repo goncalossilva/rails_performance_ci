@@ -10,14 +10,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100813000529) do
+ActiveRecord::Schema.define(:version => 20100813031413) do
 
   create_table "apps", :force => true do |t|
-    t.string   "name",       :null => false
-    t.string   "repository", :null => false
-    t.string   "frequency",  :null => false
+    t.string   "name",                             :null => false
+    t.string   "repository",                       :null => false
+    t.string   "frequency",                        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "benchmark_history", :default => 0
   end
 
   create_table "perf_benchmarks", :force => true do |t|
