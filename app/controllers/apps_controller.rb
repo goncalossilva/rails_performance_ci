@@ -2,7 +2,7 @@ class AppsController < ApplicationController
   # GET /apps
   # GET /apps.xml
   def index
-    @apps = App.all
+    @apps = App.includes(:perf_benchmarks).all
 
     respond_to do |format|
       format.html # index.html.erb
