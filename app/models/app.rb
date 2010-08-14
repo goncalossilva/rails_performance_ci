@@ -18,7 +18,7 @@ class App < ActiveRecord::Base
       ta = TestApp.new("vendor/apps/#{self.name}", self.repository)
       
       # clone/update application and necessary gems, run tests and import results
-      #ta.setup
+      ta.setup
       ta.run_tests
       results = ta.read_results
     end
@@ -52,46 +52,23 @@ class App < ActiveRecord::Base
   def import_results(results)
     # import the data into the database
     ActiveRecord::Base.transaction do
-      pb = PerfBenchmark.create!({:date => Time.now,
-                                  :app => self,
+      pb = PerfBenchmark.create!({:date       => Time.now,
+                                  :app        => self,
                                   :total_time => 0.0,
-                                  :commit => results[:commit]})
+                                  :commit     => results[:commit]})
       
       results[:data].each do |ts_name, ts_data|
         ts = PerfTest.create!({:name => File.basename(ts_name.gsub(/(.+)_[^_]+/, "\\1")),
-                              :total_time => ts_data["total_time"],
+                              :total_time     => ts_data["total_time"],
                               :perf_benchmark => pb})
         
         ts_data["threads"].each do |th_id, th_data|
           th = PerfThread.create!({:thread_id => th_id,
                                   :total_time => th_data["total_time"],
-                                  :perf_test => ts})
+                                  :perf_test  => ts})
           
-          th_data["methods"].each do |mt_name, mt_data|
-            if not th_data["methods"][mt_name].has_key?(:created_as_child)
-              mt = PerfMethod.new({:name => mt_name,
-                                  :calls => mt_data["calls"],
-                                  :total_time => mt_data["total_time"],
-                                  :self_time => mt_data["self_time"],
-                                  :perf_thread => th})
-            else
-              mt = th.perf_methods.find_by_name(mt_name)
-              mt.calls = mt_data["calls"]
-              mt.total_time = mt_data["total_time"]
-              mt.self_time = mt_data["self_time"]
-            end
-            
-            mt_data["children"].each do |child_name|
-              child = th.perf_methods.find_by_name(child_name)
-              if child.nil?
-                child = PerfMethod.create!({:name => child_name, :perf_thread => th})
-                th_data["methods"][child_name].merge!(:created_as_child => true)
-              end
-              
-              mt.children << child
-              mt.save!
-            end unless mt_data["children"].nil?
-          end
+          root = th_data["methods"].first
+          insert_new_method(root[0], root[1], th_data["methods"], th)
         end
         
         pb.total_time += ts.total_time
@@ -102,5 +79,23 @@ class App < ActiveRecord::Base
 
       pb.save!
     end
+  end
+  
+  def insert_new_method(name, data, methods, thread)
+    return thread.perf_methods.where(:name => name) if data.nil?
+    
+    m = PerfMethod.create!({:name         => name,
+                            :calls        => data["calls"],
+                            :total_time   => data["total_time"],
+                            :self_time    => data["self_time"],
+                            :perf_thread  => thread})
+    
+    methods.delete(name)
+                        
+    data["children"].each do |child|
+      m.children << insert_new_method(child, methods[child], methods, thread)
+    end unless data["children"].nil?
+    
+    m
   end
 end
