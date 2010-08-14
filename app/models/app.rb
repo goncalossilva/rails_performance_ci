@@ -52,7 +52,6 @@ class App < ActiveRecord::Base
   def import_results(results)
     # import the data into the database
     ActiveRecord::Base.transaction do
-      puts "Rails commit: #{results[:commit]}"
       pb = PerfBenchmark.create!({:date => Time.now,
                                   :app => self,
                                   :total_time => 0.0,
@@ -82,7 +81,7 @@ class App < ActiveRecord::Base
                                         :self_time => mt_data["self_time"]}
             end
             
-            unless mt_data["children"].nil?                        
+            unless mt_data["children"].nil?
               mt_data["children"].each do |child_name|
                 child = th.perf_methods.find_by_name(child_name)
                 if child.nil?
