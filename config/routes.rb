@@ -1,9 +1,14 @@
 RailsPerformanceCi::Application.routes.draw do
   resources :apps do
-    resources :perf_benchmarks
+    resources :perf_benchmarks do
+      resources :perf_tests do
+        resources :perf_threads do
+          resources :perf_methods do
+          end
+        end
+      end
+    end
   end
-  
-  #resources :perf_benchmarks
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
