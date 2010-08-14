@@ -75,24 +75,22 @@ class App < ActiveRecord::Base
                                   :self_time => mt_data["self_time"],
                                   :perf_thread => th})
             else
-              mt = th.perf_methods.find_by_name(mt_name).attributes = {
-                                        :calls => mt_data["calls"],
-                                        :total_time => mt_data["total_time"],
-                                        :self_time => mt_data["self_time"]}
+              mt = th.perf_methods.find_by_name(mt_name)
+              mt.calls = mt_data["calls"]
+              mt.total_time = mt_data["total_time"]
+              mt.self_time = mt_data["self_time"]
             end
             
-            unless mt_data["children"].nil?
-              mt_data["children"].each do |child_name|
-                child = th.perf_methods.find_by_name(child_name)
-                if child.nil?
-                  child = PerfMethod.create!({:name => child_name, :perf_thread => th})
-                  th_data["methods"][child_name].merge!(:created_as_child => true)
-                end
-                
-                mt.children << child
-                mt.save!
+            mt_data["children"].each do |child_name|
+              child = th.perf_methods.find_by_name(child_name)
+              if child.nil?
+                child = PerfMethod.create!({:name => child_name, :perf_thread => th})
+                th_data["methods"][child_name].merge!(:created_as_child => true)
               end
-            end
+              
+              mt.children << child
+              mt.save!
+            end unless mt_data["children"].nil?
           end
         end
         
