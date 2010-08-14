@@ -24,7 +24,7 @@
   <b>Performance benchmarks:</b>
   <ul>
   <% @app.perf_benchmarks.each do |perf_benchmark| %>
-    <li><%= link_to perf_benchmark.commit, [@app, perf_benchmark] %></li>
+    <li><%= link_to perf_benchmark.commit, [@app, perf_benchmark] %> (<%= link_to 'destroy', [@app, perf_benchmark], :confirm => 'Are you sure?', :method => :delete %>)</li>
   <% end %>
   </ul>
 </p>
