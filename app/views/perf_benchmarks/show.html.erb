@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Commit:</b>
+  <%= @perf_benchmark.commit %>
+</p>
+
+<p>
+  <b>Total time:</b>
+  <%= @perf_benchmark.total_time %>
+</p>
+
+<p>
+  <b>Date:</b>
+  <%= @perf_benchmark.date %>
+</p>
+
+<p>
+  <b>Application:</b>
+  <%= link_to @perf_benchmark.app.name, @perf_benchmark.app %>
+</p>
+
+<p>
+  <b>Performance tests:</b>
+  <ul>
+  <% @perf_benchmark.perf_tests.each do |perf_test| %>
+    <li><%= link_to perf_test.name, [@app, @perf_benchmark, perf_test] %></li>
+  <% end %>
+  </ul>
+</p>
+
+<%= link_to 'Edit', edit_app_perf_benchmark_path(@app, @perf_benchmark) %> |
+<%= link_to 'Back', app_perf_benchmarks_path(@app) %>

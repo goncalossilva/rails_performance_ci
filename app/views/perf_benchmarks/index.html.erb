@@ -1,0 +1,17 @@
+<h1>Listing perf_benchmarks</h1>
+
+<table>
+  <tr>
+    <th>Commit</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @perf_benchmarks.each do |perf_benchmark| %>
+  <tr>
+    <td><%= perf_benchmark.commit %></td>
+    <td><%= link_to 'Show', [@app, perf_benchmark] %></td>
+    <td><%= link_to 'Destroy', [@app, perf_benchmark], :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
