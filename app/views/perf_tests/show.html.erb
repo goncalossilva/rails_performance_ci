@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @perf_test.name %>
+</p>
+
+<p>
+  <b>Total time:</b>
+  <%= @perf_test.total_time %>
+</p>
+
+<p>
+  <b>Threads:</b>
+  <ul>
+  <% @perf_test.perf_threads.each do |perf_thread| %>
+    <li><%= link_to perf_thread.thread_id, [@app, @perf_benchmark, @perf_test, perf_thread] %></li>
+  <% end %>
+  </ul>
+</p>
