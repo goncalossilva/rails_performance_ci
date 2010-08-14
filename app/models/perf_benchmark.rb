@@ -8,6 +8,41 @@ class PerfBenchmark < ActiveRecord::Base
   validates :app, :presence => true
   validates :commit, :presence => true, :uniqueness => true
   
+  
+  
+  def differences(other)
+    differences = {:better => {}, :worse => {}}
+    methods = Array.new
+    other_methods = Array.new
+    
+    self.perf_tests.includes(:perf_threads => :perf_methods).each do |test|
+      test.perf_threads.each do |thread|
+        methods.concat(thread.perf_methods)
+      end
+    end
+    
+    other.perf_tests.includes(:perf_threads => :perf_methods).each do |test|
+      test.perf_threads.each do |thread|
+        other_methods.concat(thread.perf_methods)
+      end
+    end
+
+    methods.each do |method|
+      name = method.name
+      other_method = other_methods.find { |el| el.name == name }
+      next if other_method.nil?
+      
+      diff = method.self_time - other_method.self_time
+      if diff > other_method.self_time * 0.1 # TODO: should this be configurable?
+        differences[:worse].merge({name => diff})
+      elsif -diff > method.self_time * 0.1 # TODO: should this be configurable?
+        differences[:better].merge({name => -diff})
+      end
+      
+      differences
+    end
+  end
+  
   private
   
   def check_benchmark_history
