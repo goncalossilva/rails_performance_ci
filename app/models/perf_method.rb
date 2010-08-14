@@ -7,5 +7,6 @@ class PerfMethod < ActiveRecord::Base
   has_many :children, :through => :perf_method_associations_as_parent, :dependent => :destroy
   has_many :parents, :through => :perf_method_associations_as_child, :dependent => :destroy
     
-  validates :name, :presence => true
+  validates :name, :presence => true, :uniqueness => { :scope => :perf_thread_id }
+  validates :perf_thread, :presence => true
 end
