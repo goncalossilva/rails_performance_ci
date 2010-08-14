@@ -13,7 +13,7 @@ class TestApp
   # accordigly. If it's already there update Rails, otherwise install all the 
   # needed gems and create dummy-related information (data, routes, tests).
   def setup
-    File.makedirs(@dir)
+    FileUtils.mkdir_p(@dir)
     exists = File.exists?("#{@path}/.git")
     
     if exists
@@ -37,16 +37,17 @@ class TestApp
   end
   
   def run_tests
-    Dir.chdir(@path) { system("RAILS_ENV=test rake dummy:performance:test:all") }
+    Dir.chdir(@path) { system("RAILS_ENV='test' rake dummy:performance:test:all") }
   end
   
   def read_results
-    results = Hash.new
+    rails_commit = Dir.chdir(@path) { `git rev-parse HEAD` }
+    results = { :commit => rails_commit, :data => Hash.new }
     
     Dir["#{@path}/test/dummy/results/*.yml"].each do |file|
       name = file.chomp(File.extname(file))
     
-      results.merge!({name => YAML.load_file(file)})
+      results[:data].merge!({name => YAML.load_file(file)})
     end
     
     results
@@ -65,9 +66,10 @@ class TestApp
     content = File.read(gemfile)
     
     # Remove all references to these gems, we'll add them properly latter on
-    %w(rails ruby-prof dummy_data dummy_routes dummy_performance_tests).each do |gem|
+    %w(rails ruby-prof test-unit sqlite3-ruby dummy_data dummy_routes dummy_performance_tests).each do |gem|
       content.gsub!(/^\s*gem ['"]#{gem}['"].*;?\n?/, '')
     end
+    content.gsub!(/^# These gems are specific for the performance ci of Rails\n$/, '')
     
     new_gemfile = File.open(gemfile, "w")
     new_gemfile.write(content)
@@ -103,9 +105,9 @@ class TestApp
   end
   
   def setup_dummy
-    cmd = ["rails generate dummy:data", 
-    "rails generate dummy:routes", 
-    "rails generate dummy:performance_tests",
+    cmd = ["script/rails generate dummy:data", 
+    "script/rails generate dummy:routes", 
+    "script/rails generate dummy:performance_tests",
     "rake dummy:data:import"]
     
     Dir.chdir(@path) { system("#{cmd[0]} && #{cmd[1]} && #{cmd[2]} && #{cmd[3]}") }
