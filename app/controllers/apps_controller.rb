@@ -13,7 +13,7 @@ class AppsController < ApplicationController
   # GET /apps/1
   # GET /apps/1.xml
   def show
-    @app = App.find(params[:id])
+    @app = App.includes(:perf_benchmarks).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

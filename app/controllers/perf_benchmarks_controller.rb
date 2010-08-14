@@ -15,7 +15,7 @@ class PerfBenchmarksController < ApplicationController
   # GET /perf_benchmarks/1
   # GET /perf_benchmarks/1.xml
   def show
-    @perf_benchmark = @app.perf_benchmarks.find(params[:id])
+    @perf_benchmark = @app.perf_benchmarks.includes(:perf_tests).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
