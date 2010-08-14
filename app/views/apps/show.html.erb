@@ -20,6 +20,15 @@
   <%= @app.benchmark_history %>
 </p>
 
+<p>
+  <b>Performance benchmarks:</b>
+  <ul>
+  <% @app.perf_benchmarks.each do |perf_benchmark| %>
+    <li><%= link_to perf_benchmark.commit, [@app, perf_benchmark] %></li>
+  <% end %>
+  </ul>
+</p>
+
 
 <%= link_to 'Edit', edit_app_path(@app) %> |
 <%= link_to 'Back', apps_path %>
