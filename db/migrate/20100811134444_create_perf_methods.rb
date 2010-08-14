@@ -5,11 +5,11 @@ class CreatePerfMethods < ActiveRecord::Migration
       t.integer :calls
       t.float :total_time
       t.float :self_time
-      t.references :perf_thread
+      t.references :perf_thread, :null => false
     end
   end
 
   def self.down
-    drop_table :methods
+    drop_table :perf_methods
   end
 end

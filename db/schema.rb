@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100813031413) do
+ActiveRecord::Schema.define(:version => 20100813175039) do
 
   create_table "apps", :force => true do |t|
     t.string   "name",                             :null => false
@@ -22,9 +22,10 @@ ActiveRecord::Schema.define(:version => 20100813031413) do
   end
 
   create_table "perf_benchmarks", :force => true do |t|
-    t.float   "total_time"
-    t.date    "date",       :null => false
-    t.integer "app_id",     :null => false
+    t.float    "total_time"
+    t.datetime "date",       :null => false
+    t.integer  "app_id",     :null => false
+    t.string   "commit"
   end
 
   create_table "perf_method_associations", :force => true do |t|
@@ -37,7 +38,7 @@ ActiveRecord::Schema.define(:version => 20100813031413) do
     t.integer "calls"
     t.float   "total_time"
     t.float   "self_time"
-    t.integer "perf_thread_id"
+    t.integer "perf_thread_id", :null => false
   end
 
   create_table "perf_tests", :force => true do |t|

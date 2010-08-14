@@ -8,6 +8,6 @@ class CreatePerfThreads < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :threads
+    drop_table :perf_threads
   end
 end

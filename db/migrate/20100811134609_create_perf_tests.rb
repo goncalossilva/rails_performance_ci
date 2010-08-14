@@ -8,6 +8,6 @@ class CreatePerfTests < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :tests
+    drop_table :perf_tests
   end
 end

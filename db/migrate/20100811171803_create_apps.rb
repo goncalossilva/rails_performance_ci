@@ -10,6 +10,6 @@ class CreateApps < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :apps
+    drop_table :perf_apps
   end
 end
