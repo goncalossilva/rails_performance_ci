@@ -6,13 +6,15 @@ class PerfBenchmark < ActiveRecord::Base
   
   validates :date, :presence => true
   validates :app, :presence => true
+  validates :commit, :presence => true, :uniqueness => true
   
   private
   
   def check_benchmark_history
     app = self.app
     perf_benchmarks = app.perf_benchmarks
+    perf_benchmarks.first.delete if perf_benchmarks.size > app.benchmark_history and app.benchmark_history > 0
     
-    perf_benchmarks.first.delete if perf_benchmarks.size > app.benchmark_history
+    true
   end
 end
