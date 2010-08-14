@@ -5,3 +5,4 @@ tmp/**/*
 vendor/apps/*
 /config/schedule.rb
 public/assets/stack/*.html
+/db/backup.sql
