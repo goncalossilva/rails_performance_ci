@@ -10,6 +10,8 @@ RailsPerformanceCi::Application.routes.draw do
     end
   end
   
+  match 'apps/:id/compare/:commit1..:commit2', :to => 'apps#compare'
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

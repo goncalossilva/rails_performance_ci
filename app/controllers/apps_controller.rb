@@ -80,4 +80,19 @@ class AppsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  def compare
+    @app = App.find(params[:id])
+    commit1 = params[:commit1]
+    commit2 = params[:commit2]
+    
+    @prev_benchmark = @app.perf_benchmarks.where(:commit => commit1).first
+    @curr_benchmark = @app.perf_benchmarks.where(:commit => commit2).first
+    
+    if @prev_benchmark and @curr_benchmark
+      @differences = @curr_benchmark.differences(@prev_benchmark)
+    else
+      flash[:notice] = "Both commits need to be valid."
+    end
+  end
 end

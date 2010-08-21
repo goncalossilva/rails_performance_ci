@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>When advancing from <b><%= @prev_benchmark.commit %></b> to <b><%= @curr_benchmark.commit %></b>, the following methods became slower:</p>
+<ul>
+  <% @differences[:worse].each do |methods, difference| %>
+    <% method = PerfMethod.includes(:perf_thread => {:perf_test => {:perf_benchmark => :app}}).find(methods[0]) %>
+    <% older_method = PerfMethod.includes(:perf_thread => {:perf_test => {:perf_benchmark => :app}}).find(methods[1]) %>
+    <li><%= link_to method.name,  [method.perf_thread.perf_test.perf_benchmark.app, method.perf_thread.perf_test.perf_benchmark, method.perf_thread.perf_test, method.perf_thread, method] %> (<%= difference %>s slower) - <%= link_to older_method.name,  [older_method.perf_thread.perf_test.perf_benchmark.app, older_method.perf_thread.perf_test.perf_benchmark, older_method.perf_thread.perf_test, older_method.perf_thread, older_method] %></li>
+  <% end %>
+</ul>
+
+<p>On the other hand, the following methods became faster:</p>
+<ul>
+  <% @differences[:better].each do |methods, difference| %>
+    <% method = PerfMethod.includes(:perf_thread => {:perf_test => {:perf_benchmark => :app}}).find(methods[0]) %>
+    <li><%= link_to method.name,  [method.perf_thread.perf_test.perf_benchmark.app, method.perf_thread.perf_test.perf_benchmark, method.perf_thread.perf_test, method.perf_thread, method] %> (<%= difference %>s faster)</li>
+  <% end %>
+</ul>
+
+
