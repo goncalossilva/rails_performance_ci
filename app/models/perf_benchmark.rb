@@ -6,9 +6,7 @@ class PerfBenchmark < ActiveRecord::Base
   
   validates :date, :presence => true
   validates :app, :presence => true
-  validates :commit, :presence => true, :uniqueness => true
-  
-  
+  validates :commit, :presence => true, :uniqueness => true 
   
   def differences(other)
     differences = {:better => {}, :worse => {}}
@@ -29,18 +27,19 @@ class PerfBenchmark < ActiveRecord::Base
 
     methods.each do |method|
       name = method.name
-      other_method = other_methods.find { |el| el.name == name }
+      perf_test = method.perf_thread.perf_test
+      other_method = other_methods.find { |el| el.name == name and el.perf_thread.perf_test.name == perf_test.name }
       next if other_method.nil?
       
       diff = method.self_time - other_method.self_time
       if diff > other_method.self_time * 0.1 # TODO: should this be configurable?
-        differences[:worse].merge({name => diff})
+        differences[:worse].merge!({name => diff})
       elsif -diff > method.self_time * 0.1 # TODO: should this be configurable?
-        differences[:better].merge({name => -diff})
+        differences[:better].merge!({name => -diff})
       end
-      
-      differences
     end
+    
+    differences
   end
   
   private
