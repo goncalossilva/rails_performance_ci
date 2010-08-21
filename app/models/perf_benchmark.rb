@@ -26,16 +26,15 @@ class PerfBenchmark < ActiveRecord::Base
     end
 
     methods.each do |method|
-      name = method.name
       perf_test = method.perf_thread.perf_test
-      other_method = other_methods.find { |el| el.name == name and el.perf_thread.perf_test.name == perf_test.name }
+      other_method = other_methods.find { |el| el.name == method.name and el.perf_thread.perf_test.name == perf_test.name }
       next if other_method.nil?
       
       diff = method.self_time - other_method.self_time
       if diff > other_method.self_time * 0.1 # TODO: should this be configurable?
-        differences[:worse].merge!({name => diff})
+        differences[:worse].merge!({[method.id, other_method.id] => diff})
       elsif -diff > method.self_time * 0.1 # TODO: should this be configurable?
-        differences[:better].merge!({name => -diff})
+        differences[:better].merge!({[method.id, other_method.id] => -diff})
       end
     end
     
