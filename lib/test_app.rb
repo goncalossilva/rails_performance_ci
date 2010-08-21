@@ -41,8 +41,8 @@ class TestApp
   end
   
   def read_results
-    rails_commit = Dir.chdir(@path) { `git rev-parse HEAD` }
-    results = { :commit => rails_commit, :data => Hash.new }
+    rails_commit = Dir.chdir(@path) { `cd \`bundle show rails\` && git rev-parse HEAD` }
+    results = { :commit => rails_commit.strip, :data => Hash.new }
     
     Dir["#{@path}/test/dummy/results/*.yml"].each do |file|
       name = file.chomp(File.extname(file))
