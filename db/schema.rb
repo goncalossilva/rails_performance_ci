@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100813175039) do
+ActiveRecord::Schema.define(:version => 20100822002710) do
 
   create_table "apps", :force => true do |t|
     t.string   "name",                             :null => false
@@ -26,6 +26,15 @@ ActiveRecord::Schema.define(:version => 20100813175039) do
     t.datetime "date",       :null => false
     t.integer  "app_id",     :null => false
     t.string   "commit"
+  end
+
+  create_table "perf_differences", :force => true do |t|
+    t.string  "prev_commit",    :null => false
+    t.string  "curr_commit",    :null => false
+    t.integer "prev_method_id", :null => false
+    t.integer "curr_method_id", :null => false
+    t.float   "difference",     :null => false
+    t.string  "test_name"
   end
 
   create_table "perf_method_associations", :force => true do |t|
