@@ -29,8 +29,9 @@ class PerfBenchmark < ActiveRecord::Base
       other_method = other_methods.find { |el| el.name == method.name and el.perf_thread.perf_test.name == perf_test.name }
       next if other_method.nil?
       
+      thres = self.app.threshold
       diff = method.self_time - other_method.self_time
-      if diff > other_method.self_time * 0.1 or -diff > method.self_time * 0.1 # TODO: should this be configurable?
+      if diff > other_method.self_time * thres or -diff > method.self_time * thres
         PerfDifference.create!(:prev_commit => other.commit,
                                :curr_commit => self.commit,
                                :test_name => method.perf_thread.perf_test.name,

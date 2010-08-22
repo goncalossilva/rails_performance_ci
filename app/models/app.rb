@@ -9,6 +9,7 @@ class App < ActiveRecord::Base
   validates :name, :presence => true, :uniqueness => true
   validates :repository, :presence => true, :uniqueness => true
   validates :frequency, :presence => true
+  validates :threshold, :presence => true
   
   # Called by the cron job
   def run_performance_benchmark
