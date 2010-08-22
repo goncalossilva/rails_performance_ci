@@ -9,7 +9,6 @@ class PerfBenchmark < ActiveRecord::Base
   validates :commit, :presence => true, :uniqueness => true 
   
   def differences(other)
-    differences = {:better => {}, :worse => {}}
     methods = Array.new
     other_methods = Array.new
     
@@ -31,14 +30,15 @@ class PerfBenchmark < ActiveRecord::Base
       next if other_method.nil?
       
       diff = method.self_time - other_method.self_time
-      if diff > other_method.self_time * 0.1 # TODO: should this be configurable?
-        differences[:worse].merge!({[method.id, other_method.id] => diff})
-      elsif -diff > method.self_time * 0.1 # TODO: should this be configurable?
-        differences[:better].merge!({[method.id, other_method.id] => -diff})
+      if diff > other_method.self_time * 0.1 or -diff > method.self_time * 0.1 # TODO: should this be configurable?
+        PerfDifference.create!(:prev_commit => other.commit,
+                               :curr_commit => self.commit,
+                               :test_name => method.perf_thread.perf_test.name,
+                               :prev_method => other_method,
+                               :curr_method => method,
+                               :difference => diff)
       end
     end
-    
-    differences
   end
   
   private
