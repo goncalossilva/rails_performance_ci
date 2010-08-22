@@ -29,7 +29,7 @@ class App < ActiveRecord::Base
   private
   
   def check_scheduling
-    ::Cron.new(self.name, self.frequency)
+    Cron.new(self.name, self.frequency)
   end
   
   def with_proper_environment
@@ -83,7 +83,7 @@ class App < ActiveRecord::Base
   end
   
   def insert_new_method(name, data, methods, thread)
-    return thread.perf_methods.where(:name => name).first if data.nil?
+    return thread.perf_methods.where(:name => name).select(:id, :name).first if data.nil?
     
     m = PerfMethod.create!({:name         => name,
                             :calls        => data["calls"],
