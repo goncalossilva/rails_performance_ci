@@ -29,6 +29,17 @@
   </ul>
 </p>
 
+<p>
+  <b>Compare performance:</b>
+  <% form_tag(compare_app_path(@app)) do %>
+    <%= label_tag :commit1, "From commit:" %>
+    <%= select_tag :commit1, options_for_select([""] + @app.perf_benchmarks.collect { |pb| [pb.commit, pb.commit] }) %>
+    <%= label_tag :commit1, "To commit:" %>
+    <%= select_tag :commit2, options_for_select([""] + @app.perf_benchmarks.collect { |pb| [pb.commit, pb.commit] }) %>
+    <%= submit_tag "Analyze" %>
+  <% end %>
+</p>
+
 
 <%= link_to 'Edit', edit_app_path(@app) %> |
 <%= link_to 'Back', apps_path %>

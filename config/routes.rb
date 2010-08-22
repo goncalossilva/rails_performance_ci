@@ -8,6 +8,10 @@ RailsPerformanceCi::Application.routes.draw do
         end
       end
     end
+    
+    member do
+      post :compare
+    end
   end
   
   match 'apps/:id/compare/:commit1..:commit2', :to => 'apps#compare'
