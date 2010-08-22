@@ -83,14 +83,23 @@ class AppsController < ApplicationController
   
   def compare
     @app = App.find(params[:id])
-    commit1 = params[:commit1]
-    commit2 = params[:commit2]
+    prev_commit = params[:commit1]
+    curr_commit = params[:commit2]
     
-    @prev_benchmark = @app.perf_benchmarks.where(:commit => commit1).first
-    @curr_benchmark = @app.perf_benchmarks.where(:commit => commit2).first
+    @prev_benchmark = @app.perf_benchmarks.where(:commit => prev_commit).first
+    @curr_benchmark = @app.perf_benchmarks.where(:commit => curr_commit).first
     
     if @prev_benchmark and @curr_benchmark
-      @differences = @curr_benchmark.differences(@prev_benchmark)
+      @differences = PerfDifference.includes(
+        :prev_method => {:perf_thread => {:perf_test => {:perf_benchmark => :app}}}, 
+        :curr_method => {:perf_thread => {:perf_test => {:perf_benchmark => :app}}}
+      ).find_all_by_prev_commit_and_curr_commit(prev_commit, curr_commit)
+      
+      if @differences.empty?
+        Process.fork do
+          @curr_benchmark.differences(@prev_benchmark)
+        end
+      end
     else
       flash[:notice] = "Both commits need to be valid."
     end
