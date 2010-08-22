@@ -1,0 +1,15 @@
+<p><%= message.html_safe %>:</p>
+<ul>
+  <% differences.group_by(&:test_name).each do |test_name, differences| %>
+    <li><%= test_name %>
+      <ul>
+        <% differences.each do |diff| %>
+          <% method = diff.curr_method %>
+          <% prev_method = diff.prev_method %>
+          
+          <li><%= link_to method.name, [method.perf_thread.perf_test.perf_benchmark.app, method.perf_thread.perf_test.perf_benchmark, method.perf_thread.perf_test, method.perf_thread, method] %> (<%= -diff.difference %>s slower than <%= link_to "previously",  [prev_method.perf_thread.perf_test.perf_benchmark.app, prev_method.perf_thread.perf_test.perf_benchmark, prev_method.perf_thread.perf_test, prev_method.perf_thread, prev_method] %>)</li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>

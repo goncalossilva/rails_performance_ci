@@ -1,20 +1,18 @@
 <p id="notice"><%= notice %></p>
 
-<p>When advancing from <b><%= @prev_benchmark.commit %></b> to <b><%= @curr_benchmark.commit %></b>, the following methods became slower:</p>
-<ul>
-  <% @differences[:worse].each do |methods, difference| %>
-    <% method = PerfMethod.includes(:perf_thread => {:perf_test => {:perf_benchmark => :app}}).find(methods[0]) %>
-    <% older_method = PerfMethod.includes(:perf_thread => {:perf_test => {:perf_benchmark => :app}}).find(methods[1]) %>
-    <li><%= link_to method.name,  [method.perf_thread.perf_test.perf_benchmark.app, method.perf_thread.perf_test.perf_benchmark, method.perf_thread.perf_test, method.perf_thread, method] %> (<%= difference %>s slower) - <%= link_to older_method.name,  [older_method.perf_thread.perf_test.perf_benchmark.app, older_method.perf_thread.perf_test.perf_benchmark, older_method.perf_thread.perf_test, older_method.perf_thread, older_method] %></li>
-  <% end %>
-</ul>
+<% if @prev_benchmark and @curr_benchmark %>
+  <p>Total time for <%= link_to @prev_benchmark.commit, [@app, @prev_benchmark] %>: <b><%= @prev_benchmark.total_time %>s</b></p>
+  <p>Total time for <%= link_to @curr_benchmark.commit, [@app, @curr_benchmark] %>: <b><%= @curr_benchmark.total_time %>s</b></p>
 
-<p>On the other hand, the following methods became faster:</p>
-<ul>
-  <% @differences[:better].each do |methods, difference| %>
-    <% method = PerfMethod.includes(:perf_thread => {:perf_test => {:perf_benchmark => :app}}).find(methods[0]) %>
-    <li><%= link_to method.name,  [method.perf_thread.perf_test.perf_benchmark.app, method.perf_thread.perf_test.perf_benchmark, method.perf_thread.perf_test, method.perf_thread, method] %> (<%= difference %>s faster)</li>
+  <% if @differences.empty? %>   
+    <p>The performance differences are being calculated. Depending on the amount of tests, this analysis can take some time. Please wait a few minutes and refresh this page.</p>
+  <% else %>
+    <% negative_differences = @differences.find_all { |el| el.difference > 0.0 } %>
+    <% positive_differences = @differences.find_all { |el| el.difference < 0.0 } %>
+    
+    <%= render :partial => "comparison", :locals => { :differences => negative_differences, :message => "When advancing from <b>#{@prev_benchmark.commit}</b> to <b>#{@curr_benchmark.commit}</b>, the following methods became slower" } %>
+    <%= render :partial => "comparison", :locals => { :differences => positive_differences, :message => "On the other hand, the following methods became faster" } %>    
   <% end %>
-</ul>
+<% end %>
 
 
