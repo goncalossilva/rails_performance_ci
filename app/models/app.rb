@@ -68,9 +68,10 @@ class App < ActiveRecord::Base
                                   :total_time => th_data["total_time"],
                                   :perf_test  => ts})
           
-          root = th_data["methods"].first
+          root_name = "ActiveSupport::Testing::Performance::Profiler#run"
+          root_data = th_data["methods"][root_name]
           
-          insert_new_method(root[0], root[1], th_data["methods"], th)
+          insert_new_method(root_name, root_data, th_data["methods"], th)
         end
         
         pb.total_time += ts.total_time
