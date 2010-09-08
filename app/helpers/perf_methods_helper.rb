@@ -1,2 +1,0 @@
-module PerfMethodsHelper
-end
