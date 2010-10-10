@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  output: MyText
+  successful: false
+  total_time: 1.5
+
+two:
+  output: MyText
+  successful: false
+  total_time: 1.5

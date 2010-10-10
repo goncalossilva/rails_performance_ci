@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  permalink: MyString
+  uri: 
+  branch: MyString
+  public: false
+
+two:
+  name: MyString
+  permalink: MyString
+  uri: 
+  branch: MyString
+  public: false

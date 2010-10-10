@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  hash: MyString
+  message: MyString
+  author: MyString
+  date: 2010-10-06 17:58:18
+
+two:
+  hash: MyString
+  message: MyString
+  author: MyString
+  date: 2010-10-06 17:58:18
