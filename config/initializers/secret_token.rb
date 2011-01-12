@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-RailsPerformanceCi::Application.config.secret_token = '2aea76aaa2bab66660d057bab1d32554ffee61371574e135b1093f8dcd580d77eaa0ea7555342daa877595dfa5c148ad653a952aaa00f6672aa9bc0356047bcb'
+RailsPerformanceCi::Application.config.secret_token = '9f70504af8182790b79041840ca5d97b42e1b777642b754741c9d78bf0c555f6579632bff1db4b975229f59d9fb86d0651cc4ed01dd4f37c52ef4b06ec3f8b1b'
