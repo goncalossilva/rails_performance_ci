@@ -23,10 +23,10 @@ ActiveRecord::Schema.define(:version => 20101006170727) do
   end
 
   create_table "commits", :force => true do |t|
-    t.string   "hash",           :null => false
+    t.string   "sha1",           :null => false
     t.string   "message"
     t.string   "author"
-    t.datetime "date"
+    t.datetime "time"
     t.integer  "application_id"
     t.datetime "created_at"
     t.datetime "updated_at"
