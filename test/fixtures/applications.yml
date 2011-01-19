@@ -1,15 +1,8 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  name: MyString
-  permalink: MyString
-  uri: 
-  branch: MyString
-  public: false
-
-two:
-  name: MyString
-  permalink: MyString
-  uri: 
-  branch: MyString
-  public: false
+sample_rails_app:
+  name: Sample Rails App
+  permalink: sample_rails_app
+  uri: git://github.com/goncalossilva/sample_rails3_app.git
+  branch: master
+  public: true
