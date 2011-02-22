@@ -1,6 +1,8 @@
 class Commit < ActiveRecord::Base
   belongs_to :application
   has_one :benchmark, :class_name => "Result::Benchmark"
+  
+  validates_length_of :sha1, :minimum => 7, :maximum => 40
 
   def checkout
     runner.run! "git clone #{application.uri} #{application.root}" unless Dir.exists?(application.root)
