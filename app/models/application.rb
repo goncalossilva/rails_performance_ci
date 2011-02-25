@@ -1,17 +1,19 @@
 class Application < ActiveRecord::Base
   has_many :commits
   
-  validates_format_of :permalink, :with => /\A[a-z0-9-_]+\Z/
+  validates_format_of :permalink, :with => /\A[a-z0-9\-_]+\Z/
   
-  def parse_push(payload)
+  def parse_payload(payload)
     payload_branch = payload["ref"].split("refs/heads/").last
     
     if payload_branch == branch
       payload_commits = payload["commits"].map { |commit|
-        {:sha1 => commit["id"],
-        :author => "#{commit["name"]} <#{commit["email"]}>",
-        :message => commit["message"],
-        :time => commit["timestamp"]}
+        commits << Commit.create(        
+          {:sha1 => commit["id"],
+          :author => "#{commit["author"]["name"]} <#{commit["author"]["email"]}>",
+          :message => commit["message"],
+          :time => commit["timestamp"]}
+        )
       }
     end
     
