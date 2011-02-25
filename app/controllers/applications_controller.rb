@@ -1,13 +1,15 @@
 class ApplicationsController < ApplicationController
-  protect_from_forgery
+  before_filter :load_application
   
-  def github
-    @application.parse_push(params[:payload])
+  def github    
+    @application.parse_payload(params[:payload])
+    
+    render :nothing => true
   end
   
   private
   
   def load_application
-    @application = Application.find_by_permalink(params[:id])
+    @application = Application.find_by_permalink(params[:id])    
   end
 end
