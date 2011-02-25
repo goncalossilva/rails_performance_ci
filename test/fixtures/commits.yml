@@ -5,4 +5,4 @@ sample_first_commit:
   message:
   author:
   time:
-  application: sample_rails_app
+  application: sample_rails3_app
