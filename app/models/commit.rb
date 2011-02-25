@@ -21,8 +21,8 @@ class Commit < ActiveRecord::Base
       
     result = runner.run_in_dir!("git show -s --pretty=format:\"#{format}\" #{sha1}")
     dump   = YAML.load(result.output)
-
-    dump.update("time" => Time.parse(dump["time"]))
+    
+    dump.update("time" => dump["time"])
   end
 
   # TODO: this might be needed, else remove
