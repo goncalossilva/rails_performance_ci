@@ -6,6 +6,7 @@ class CreateApplications < ActiveRecord::Migration
       t.string  :uri,       :null => false, :length => 255
       t.string  :branch,    :default => "master"
       t.boolean :public,    :default => false
+      t.string  :token,     :null => false, :length => 16
 
       t.timestamps
     end

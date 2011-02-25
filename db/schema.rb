@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(:version => 20101006170727) do
     t.string   "uri",                              :null => false
     t.string   "branch",     :default => "master"
     t.boolean  "public",     :default => false
+    t.string   "token",                            :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
